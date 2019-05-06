@@ -8,13 +8,14 @@
 /* On mouse hover, lighten state color */
 path:hover {
 	fill-opacity: .7;
+	border-color: #000000
 }
 
 /* Style for Custom Tooltip */
 div.tooltip {   
  	position: absolute;           
 	text-align: center;           
-	width: 60px;                  
+	width: 350px;                  
 	height: 28px;                 
 	padding: 2px;             
 	font: 12px sans-serif;        
@@ -39,6 +40,18 @@ body {
 </style>
 </head>
 <body>
+<div id="option">
+    <input name="race" 
+           type="button" 
+           value="Race" 
+           onclick="race()" />
+</div>
+<div id="option">
+    <input name="race" 
+           type="button" 
+           value="Politics" 
+           onclick="Politics()" />
+</div>
 <script type="text/javascript">
 
 /*  This visualization was made possible by modifying code provided by:
@@ -58,8 +71,12 @@ var scale = 1
 
 
 // Define linear scale for output
-var color = d3.scaleLinear()
-			  .range(["rgb(213,222,217)","rgb(69,173,168)","rgb(84,36,55)","rgb(217,91,67)"]);
+var colorp = d3.scaleLinear()
+			  .range(["rgb(255, 0, 0)", "rgb(0, 0, 255)"]);
+
+// Define linear scale for output
+var colorr = d3.scaleLinear()
+			  .range(["rgb(50, 30, 0)", "rgb(255, 255, 230)"]);
 
 //Create SVG element and append map to the SVG
 var svg = d3.select("body")
@@ -75,7 +92,7 @@ var div = d3.select("body")
 
 
 // Load GeoJSON data and merge with states data
-d3.json("PA/d18/districts.json").then(function(json) {
+d3.json("PA/d18/districts.json").then(async function(json) {
 		
 	  var center = d3.geoCentroid(json)
       var scale  = 150;
@@ -101,6 +118,10 @@ d3.json("PA/d18/districts.json").then(function(json) {
       path = path.projection(projection);
 
 
+var feat = await d3.csv("/PA/d18/features.csv")
+
+function politics() {
+
 // Bind the data to the SVG and create one path per GeoJSON feature
 svg.selectAll("path")
 	.data(json.features)
@@ -110,22 +131,84 @@ svg.selectAll("path")
 	.style("stroke", "#fff")
 	.style("stroke-width", "1")
 	.style("fill", function(d) {
+	var district = d.properties.REMEDIAL_P
 
-	// Get data value
-	var value = d.properties.visited;
+	var demShare = parseInt(feat[district-1]["Democratic"], 10)/(parseInt(feat[district-1]["Democratic"], 10) + parseInt(feat[district-1]["Republican"], 10))
+	console.log(district)
+	console.log(demShare)
 
-	if (value) {
+	if (demShare) {
 	//If value exists…
-	return color(value);
+	return colorp(demShare);
 	} else {
 	//If value is undefined…
 	return "rgb(213,222,217)";
-	}
+	}})
+	.on("mouseover", function(d) {
+
+		var district = d.properties.REMEDIAL_P
+
+		var demShare = parseInt(feat[district-1]["Democratic"], 10)/(parseInt(feat[district-1]["Democratic"], 10) + parseInt(feat[district-1]["Republican"], 10))
+
+		div.transition()
+			.duration(200)
+			.style("opacity", 0.95); 
+		div.text("Clinton 2-Party Share, 2016: " +  Math.round(demShare*10000)/100);
+	})
+	.on("mouseout", function(d) {       
+        div.transition()        
+           .duration(500)      
+           .style("opacity", 0);   
+    });
+}
+
+function race() {
+// Bind the data to the SVG and create one path per GeoJSON feature
+svg.selectAll("path")
+	.data(json.features)
+	.enter()
+	.append("path")
+	.attr("d", path)
+	.style("stroke", "#000")
+	.style("stroke-width", "1")
+	.style("fill", function(d) {
+	var district = d.properties.REMEDIAL_P
+
+	var whiteShare = parseInt(feat[district-1]["White"], 10)/parseInt(feat[district-1]["Population"], 10)
+	console.log(district)
+	console.log(whiteShare)
+
+	if (whiteShare) {
+	//If value exists…
+	return colorr(whiteShare);
+	} else {
+	//If value is undefined…
+	return "rgb(213,222,217)";
+	}})
+	.on("mouseover", function(d) {
+
+		var district = d.properties.REMEDIAL_P
+
+		var whiteShare = parseInt(feat[district-1]["White"], 10)/parseInt(feat[district-1]["Population"], 10)
+
+
+		div.transition()
+			.duration(200)
+			.style("opacity", 0.95); 
+		div.text("White Population, 2016: " +  Math.round(whiteShare*10000)/100);
+	})
+	.on("mouseout", function(d) {       
+        div.transition()        
+           .duration(500)      
+           .style("opacity", 0);   
+    });
+
+	
+}
+race()
 });
 
-	});
 
-console.log("Hi")		
 
 
 </script>
