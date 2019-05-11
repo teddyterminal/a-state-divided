@@ -36,6 +36,8 @@ dc = d2018
 fc = f2018
 pc = p2018
 
+var flag = "Politics"
+
 
 
 // Load GeoJSON data and merge with states data
@@ -82,8 +84,6 @@ d3.json(dc).then(async function(json)
 			var demShare = parseInt(feat[district-1]["Democratic"], 10)/
 						  (parseInt(feat[district-1]["Democratic"], 10) + 
 						   parseInt(feat[district-1]["Republican"], 10))
-			console.log(district)
-			console.log(demShare)
 
 			if (demShare) {
 				//If value exists…
@@ -113,13 +113,12 @@ d3.json(dc).then(async function(json)
 	           .style("opacity", 0);   
 	    });
 	
-	async function politics() 
+	function politics() 
 	{
-		feat = await d3.csv(fc)
+		flag = "Politics";
 		// Bind the data to the SVG and create one path per GeoJSON feature
 		map.transition()
-			.duration(500)
-			.attr("d", path)
+			.delay(500).duration(1000)
 			.style("stroke", "#fff")
 			.style("stroke-width", "1")
 			.style("fill", function(d) 
@@ -129,8 +128,6 @@ d3.json(dc).then(async function(json)
 				var demShare = parseInt(feat[district-1]["Democratic"], 10)/
 							  (parseInt(feat[district-1]["Democratic"], 10) + 
 							   parseInt(feat[district-1]["Republican"], 10))
-				console.log(district)
-				console.log(demShare)
 
 				if (demShare) {
 					//If value exists…
@@ -162,27 +159,19 @@ d3.json(dc).then(async function(json)
 		return map
 	}
 
-	async function race() 
+	function race() 
 	{
-		feat = await d3.csv(fc)
-		console.log("HI RACE")
+		flag = "Race";
 		// Bind the data to the SVG and create one path per GeoJSON feature
 		map.transition()
-			.duration(500)
-			.attr("d", path)
+			.delay(500).duration(1000)
 			.style("stroke", "#000")
 			.style("stroke-width", "1")
 			.style("fill", function(d) 
 			{
-				console.log(dc)
-				console.log(d, pc)
-				console.log(d.properties)
 				var district = d.properties[pc]
-				console.log(district)
 				var whiteShare = parseInt(feat[district-1]["White"], 10)/
 								 parseInt(feat[district-1]["Population"], 10)
-				console.log(district)
-				console.log(whiteShare)
 
 				if (whiteShare) {
 					//If value exists…
@@ -224,8 +213,8 @@ d3.json(dc).then(async function(json)
 
 });
 
-d3.select("#d2011").on("click", async function() {dc = d2011; fc = f2011; pc = p2011; update(dc, fc, pc); }); 
-d3.select("#d2018").on("click", async function() {dc = d2018; fc = f2018; pc = p2018; update(dc, fc, pc); }); 
+d3.select("#d2011").on("click", function() {dc = d2011; fc = f2011; pc = p2011; update(dc, fc, pc); }); 
+d3.select("#d2018").on("click", function() {dc = d2018; fc = f2018; pc = p2018; update(dc, fc, pc); }); 
 
 
 function update(dc, fc, pc)
@@ -233,7 +222,6 @@ function update(dc, fc, pc)
 	// Load GeoJSON data and merge with states data
 	d3.json(dc).then(async function(json) 
 	{
-			
 		var center = d3.geoCentroid(json)
 		var scale  = 150;
 		var offset = [width/2, height/2];
@@ -258,60 +246,21 @@ function update(dc, fc, pc)
 		path = path.projection(projection);
 
 		var feat = await d3.csv(fc)
-
-		svg.transition().duration(500)
+		svg.attr("d", path)
 		// Bind the data to the SVG and create one path per GeoJSON feature
-		var map = svg.selectAll("path").remove()
-			.data(json.features)
-			.enter()
-			.append("path")
-			.attr("d", path)
-			.style("stroke", "#fff")
-			.style("stroke-width", "1")
-			.style("fill", function(d) 
-			{
-				var district = d.properties[pc]
 
-				var demShare = parseInt(feat[district-1]["Democratic"], 10)/
-							  (parseInt(feat[district-1]["Democratic"], 10) + 
-							   parseInt(feat[district-1]["Republican"], 10))
-				console.log(district)
-				console.log(demShare)
-
-				if (demShare) {
-					//If value exists…
-					return colorp(demShare);
-				} 
-				else {
-					//If value is undefined…
-					return "rgb(213,222,217)";}
-			})
-			.on("mouseover", function(d) 
-			{
-				var district = d.properties[pc]
-
-				var demShare = parseInt(feat[district-1]["Democratic"], 10)/
-							  (parseInt(feat[district-1]["Democratic"], 10) + 
-							   parseInt(feat[district-1]["Republican"], 10))
-
-				div.transition()
-					.duration(200)
-					.style("opacity", 0.95); 
-				div.text("Clinton 2-Party Share, 2016: " +  Math.round(demShare*10000)/100);
-			})
-			.on("mouseout", function(d) 
-			{       
-		        div.transition()        
-		           .duration(500)      
-		           .style("opacity", 0);   
-		    });
+		var map = svg.selectAll("path").data(json.features); 
+		if (flag == "Politics")
+			politics();
+		else
+			race(); 
 		
-		async function politics() 
+		function politics() 
 		{
-			feat = await d3.csv(fc)
+			flag = "Politics"; 
 			// Bind the data to the SVG and create one path per GeoJSON feature
 			map.transition()
-				.duration(500)
+				.delay(500).duration(1000)
 				.attr("d", path)
 				.style("stroke", "#fff")
 				.style("stroke-width", "1")
@@ -322,8 +271,6 @@ function update(dc, fc, pc)
 					var demShare = parseInt(feat[district-1]["Democratic"], 10)/
 								  (parseInt(feat[district-1]["Democratic"], 10) + 
 								   parseInt(feat[district-1]["Republican"], 10))
-					console.log(district)
-					console.log(demShare)
 
 					if (demShare) {
 						//If value exists…
@@ -355,27 +302,21 @@ function update(dc, fc, pc)
 			return map
 		}
 
-		async function race() 
+		function race() 
 		{
-			feat = await d3.csv(fc)
-			console.log("HI RACE")
+			flag = "Race"; 
 			// Bind the data to the SVG and create one path per GeoJSON feature
 			map.transition()
-				.duration(500)
+				.delay(500).duration(1000)
 				.attr("d", path)
 				.style("stroke", "#000")
 				.style("stroke-width", "1")
 				.style("fill", function(d) 
 				{
-					console.log(dc)
-					console.log(d, pc)
-					console.log(d.properties)
+					
 					var district = d.properties[pc]
-					console.log(district)
 					var whiteShare = parseInt(feat[district-1]["White"], 10)/
 									 parseInt(feat[district-1]["Population"], 10)
-					console.log(district)
-					console.log(whiteShare)
 
 					if (whiteShare) {
 						//If value exists…
