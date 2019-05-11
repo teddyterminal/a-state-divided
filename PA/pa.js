@@ -24,9 +24,22 @@ var div = d3.select("body")
     		.attr("class", "tooltip")               
     		.style("opacity", 0);
 
+d2018 = "PA/d18/districts.json"
+f2018 = "PA/d18/features.csv"
+p2018 = "REMEDIAL_P"
+
+d2011 = "PA/d11/districts.json"
+f2011 = "PA/d11/features.csv"
+p2011 = "DIST_2011"
+
+dc = d2018
+fc = f2018
+pc = p2018
+
+
 
 // Load GeoJSON data and merge with states data
-d3.json("PA/d18/districts.json").then(async function(json) 
+d3.json(dc).then(async function(json) 
 {
 		
 	var center = d3.geoCentroid(json)
@@ -53,7 +66,7 @@ d3.json("PA/d18/districts.json").then(async function(json)
 	path = path.projection(projection);
 
 
-	var feat = await d3.csv("PA/d18/features.csv")
+	var feat = await d3.csv(fc)
 
 	function politics() 
 	{
@@ -68,7 +81,7 @@ d3.json("PA/d18/districts.json").then(async function(json)
 			.style("stroke-width", "1")
 			.style("fill", function(d) 
 			{
-				var district = d.properties.REMEDIAL_P
+				var district = d.properties[pc]
 
 				var demShare = parseInt(feat[district-1]["Democratic"], 10)/
 							  (parseInt(feat[district-1]["Democratic"], 10) + 
@@ -86,7 +99,7 @@ d3.json("PA/d18/districts.json").then(async function(json)
 			})
 			.on("mouseover", function(d) 
 			{
-				var district = d.properties.REMEDIAL_P
+				var district = d.properties[pc]
 
 				var demShare = parseInt(feat[district-1]["Democratic"], 10)/
 							  (parseInt(feat[district-1]["Democratic"], 10) + 
@@ -116,7 +129,7 @@ d3.json("PA/d18/districts.json").then(async function(json)
 			.style("stroke", "#000")
 			.style("stroke-width", "1")
 			.style("fill", function(d) {
-			var district = d.properties.REMEDIAL_P
+			var district = d.properties[pc]
 
 			var whiteShare = parseInt(feat[district-1]["White"], 10)/
 							 parseInt(feat[district-1]["Population"], 10)
@@ -133,7 +146,7 @@ d3.json("PA/d18/districts.json").then(async function(json)
 			}})
 			.on("mouseover", function(d) {
 
-				var district = d.properties.REMEDIAL_P
+				var district = d.properties[pc]
 
 				var whiteShare = parseInt(feat[district-1]["White"], 10)/
 								 parseInt(feat[district-1]["Population"], 10)
