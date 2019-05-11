@@ -10,7 +10,7 @@ var colorp = d3.scaleLinear()
 
 // Define linear scale for output
 var colorr = d3.scaleLinear()
-			  .range(["rgb(50, 30, 0)", "rgb(255, 255, 230)"]);
+			  .range(["rgb(20, 90, 0)", "rgb(230, 255, 230)"]);
 
 //Create SVG element and append map to the SVG
 var svg = d3.select("body")
@@ -65,17 +65,59 @@ d3.json(dc).then(async function(json)
 		.scale(scale).translate(offset);
 	path = path.projection(projection);
 
-
 	var feat = await d3.csv(fc)
 
+	// Bind the data to the SVG and create one path per GeoJSON feature
+	var map = svg.selectAll("path")
+		.data(json.features)
+		.enter()
+		.append("path")
+		.attr("d", path)
+		.style("stroke", "#fff")
+		.style("stroke-width", "1")
+		.style("fill", function(d) 
+		{
+			var district = d.properties[pc]
+
+			var demShare = parseInt(feat[district-1]["Democratic"], 10)/
+						  (parseInt(feat[district-1]["Democratic"], 10) + 
+						   parseInt(feat[district-1]["Republican"], 10))
+			console.log(district)
+			console.log(demShare)
+
+			if (demShare) {
+				//If value exists…
+				return colorp(demShare);
+			} 
+			else {
+				//If value is undefined…
+				return "rgb(213,222,217)";}
+		})
+		.on("mouseover", function(d) 
+		{
+			var district = d.properties[pc]
+
+			var demShare = parseInt(feat[district-1]["Democratic"], 10)/
+						  (parseInt(feat[district-1]["Democratic"], 10) + 
+						   parseInt(feat[district-1]["Republican"], 10))
+
+			div.transition()
+				.duration(200)
+				.style("opacity", 0.95); 
+			div.text("Clinton 2-Party Share, 2016: " +  Math.round(demShare*10000)/100);
+		})
+		.on("mouseout", function(d) 
+		{       
+	        div.transition()        
+	           .duration(500)      
+	           .style("opacity", 0);   
+	    });
+	
 	function politics() 
 	{
-
 		// Bind the data to the SVG and create one path per GeoJSON feature
-		svg.selectAll("path")
-			.data(json.features)
-			.enter()
-			.append("path")
+		map.transition()
+			.duration(500)
 			.attr("d", path)
 			.style("stroke", "#fff")
 			.style("stroke-width", "1")
@@ -96,35 +138,35 @@ d3.json(dc).then(async function(json)
 				else {
 					//If value is undefined…
 					return "rgb(213,222,217)";}
-			})
-			.on("mouseover", function(d) 
-			{
-				var district = d.properties[pc]
+			}); 
+		map.on("mouseover", function(d) 
+		{
+			var district = d.properties[pc]
 
-				var demShare = parseInt(feat[district-1]["Democratic"], 10)/
-							  (parseInt(feat[district-1]["Democratic"], 10) + 
-							   parseInt(feat[district-1]["Republican"], 10))
+			var demShare = parseInt(feat[district-1]["Democratic"], 10)/
+						  (parseInt(feat[district-1]["Democratic"], 10) + 
+						   parseInt(feat[district-1]["Republican"], 10))
 
-				div.transition()
-					.duration(200)
-					.style("opacity", 0.95); 
-				div.text("Clinton 2-Party Share, 2016: " +  Math.round(demShare*10000)/100);
-			})
+			div.transition()
+				.duration(200)
+				.style("opacity", 0.95); 
+			div.text("Clinton 2-Party Share, 2016: " +  Math.round(demShare*10000)/100);
+		})
 			.on("mouseout", function(d) 
 			{       
 		        div.transition()        
 		           .duration(500)      
 		           .style("opacity", 0);   
 		    });
+		return map
 	}
 
 	function race() 
 	{
+		console.log("HI RACE")
 		// Bind the data to the SVG and create one path per GeoJSON feature
-		svg.selectAll("path")
-			.data(json.features)
-			.enter()
-			.append("path")
+		map.transition()
+			.duration(500)
 			.attr("d", path)
 			.style("stroke", "#000")
 			.style("stroke-width", "1")
@@ -143,30 +185,34 @@ d3.json(dc).then(async function(json)
 			} else {
 			//If value is undefined…
 			return "rgb(213,222,217)";
-			}})
-			.on("mouseover", function(d) {
+			}}); 
+		
+		map.on("mouseover", function(d) 
+		{
 
-				var district = d.properties[pc]
+			var district = d.properties[pc]
 
-				var whiteShare = parseInt(feat[district-1]["White"], 10)/
-								 parseInt(feat[district-1]["Population"], 10)
+			var whiteShare = parseInt(feat[district-1]["White"], 10)/
+							 parseInt(feat[district-1]["Population"], 10)
 
 
-				div.transition()
-					.duration(200)
-					.style("opacity", 0.95); 
-				div.text("White Population, 2016: " +  Math.round(whiteShare*10000)/100);
-			})
-			.on("mouseout", function(d) {       
+			div.transition()
+				.duration(200)
+				.style("opacity", 0.95); 
+			div.text("White Population, 2016: " +  Math.round(whiteShare*10000)/100);
+		})
+			.on("mouseout", function(d) 
+			{       
 		        div.transition()        
 		           .duration(500)      
 		           .style("opacity", 0);   
-		    });
+			});
 
 		
 	}
-	politics()
+
+
+	d3.select("#Politics").on("click", function() {politics(); }); 
+	d3.select("#Race").on("click", function() {race(); }); 
+
 });
-
-
-
