@@ -32,6 +32,14 @@ var div = d3.select("#map")
     		.attr("class", "tooltip")               
     		.style("opacity", 0);
 
+var de = []
+var fe = []
+for (i = 1; i < 70; i++)
+{
+	de.push("PA/" + i + "/districts.json")
+	fe.push("PA/" + i + "/features.csv")
+}
+
 d2018 = "PA/d18/districts.json"
 f2018 = "PA/d18/features.csv"
 p2018 = "REMEDIAL_P"
@@ -66,6 +74,15 @@ d3.select("#dd538").on("click", function() {dc = dd538; fc = fd538; pc = pd538; 
 d3.select("#dr538").on("click", function() {dc = dr538; fc = fr538; pc = pr538; update(dc, fc, pc); }); 
 d3.select("#dc538").on("click", function() {dc = dc538; fc = fc538; pc = pc538; update(dc, fc, pc); }); 
 d3.select("#dg8").on("click", function() {dc = dg8; fc = fg8; pc = pg8; update(dc, fc, pc); }); 
+d3.select("#explore").on("click", function() 
+{
+	index = Math.floor(Math.random()*de.length)
+	dc = de[index]; 
+	fc = fe[index]; 
+	pc = "CD"; 
+	console.log(dc, fc, pc)
+	update(dc, fc, pc); 
+}); 
 
 var flag = "Politics"
 
@@ -99,6 +116,7 @@ d3.json(dc).then(async function(json)
 	path = path.projection(projection);
 
 	var feat = await d3.csv(fc)
+	console.log(feat)
 
 	// Bind the data to the SVG and create one path per GeoJSON feature
 	var map = svg.selectAll("path")
@@ -385,6 +403,7 @@ function update(dc, fc, pc)
 		path = path.projection(projection);
 
 		var feat = await d3.csv(fc)
+		console.log(feat)
 		svg.attr("d", path)
 		// Bind the data to the SVG and create one path per GeoJSON feature
 
