@@ -40,9 +40,32 @@ d2011 = "PA/d11/districts.json"
 f2011 = "PA/d11/features.csv"
 p2011 = "DIST_2011"
 
+dd538 = "PA/d538/districts.json"
+fd538 = "PA/d538/features.csv"
+pd538 = "DEM_538"
+
+dr538 = "PA/r538/districts.json"
+fr538 = "PA/r538/features.csv"
+pr538 = "GOP_538"
+
+dc538 = "PA/cs538/districts.json"
+fc538 = "PA/cs538/features.csv"
+pc538 = "CPCT_538"
+
+dg8 = "PA/g8/districts.json"
+fg8 = "PA/g8/features.csv"
+pg8 = "GRADE_8"
+
 dc = d2018
 fc = f2018
 pc = p2018
+
+d3.select("#d2011").on("click", function() {dc = d2011; fc = f2011; pc = p2011; update(dc, fc, pc); }); 
+d3.select("#d2018").on("click", function() {dc = d2018; fc = f2018; pc = p2018; update(dc, fc, pc); }); 
+d3.select("#dd538").on("click", function() {dc = dd538; fc = fd538; pc = pd538; update(dc, fc, pc); }); 
+d3.select("#dr538").on("click", function() {dc = dr538; fc = fr538; pc = pr538; update(dc, fc, pc); }); 
+d3.select("#dc538").on("click", function() {dc = dc538; fc = fc538; pc = pc538; update(dc, fc, pc); }); 
+d3.select("#dg8").on("click", function() {dc = dg8; fc = fg8; pc = pg8; update(dc, fc, pc); }); 
 
 var flag = "Politics"
 
@@ -331,9 +354,6 @@ d3.json(dc).then(async function(json)
 	d3.select("#Race").on("click", function() {race(); }); 
 
 });
-
-d3.select("#d2011").on("click", function() {dc = d2011; fc = f2011; pc = p2011; update(dc, fc, pc); }); 
-d3.select("#d2018").on("click", function() {dc = d2018; fc = f2018; pc = p2018; update(dc, fc, pc); }); 
 
 
 function update(dc, fc, pc)
