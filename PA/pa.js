@@ -21,13 +21,13 @@ var colorr = d3.scaleLinear()
 			  .range(["rgb(20, 90, 0)", "rgb(230, 255, 230)"]);
 
 //Create SVG element and append map to the SVG
-var svg = d3.select("body")
+var svg = d3.select("#map")
 			.append("svg")
 			.attr("height", height)
 			.attr("width", width)
         
 // Append Div for tooltip to SVG
-var div = d3.select("body")
+var div = d3.select("#map")
 		    .append("div")   
     		.attr("class", "tooltip")               
     		.style("opacity", 0);
@@ -106,6 +106,86 @@ d3.json(dc).then(async function(json)
 	           .style("opacity", 0);   
 	    });
 	
+
+		var w = 500; 
+		var h = 110; 
+		var chart = d3.select("#chart")
+			.append("svg")
+			.attr("width", w)
+			.attr("height", h)
+			.attr("transform", "translate(250, 0)");
+
+
+		var data = []
+		for (i = 0; i < 18; i++)
+		{
+			var demShare = parseInt(feat[i]["Democratic"], 10)/
+						  (parseInt(feat[i]["Democratic"], 10) + 
+						   parseInt(feat[i]["Republican"], 10))	
+						   		
+			data.push(demShare*100)
+		}
+		data = data.sort()
+		chart.selectAll( "rect" )
+			.data( data )
+			.enter()
+			.append("rect")
+			.attr( "x", function(d, i)
+			{
+				return i*25 + 30; 
+			})
+			.attr( "y", function(d)
+			{
+				return h - d; 				
+			})
+			.attr( "width", 20 )
+			.attr( "height", function(d)
+			{
+
+
+
+				return d
+			} )
+			.attr( "fill", function(d)
+				{
+					if (d < 50) 
+						return "#FF0000"
+					else return "#0000FF"
+				}); 
+
+			chart.append("line")
+				.attr("x1", 25)
+				.attr("y1", 10)
+				.attr("x2", 25)
+				.attr("y2", 110)
+				.attr("stroke-width", 2)
+				.attr("stroke", "black");
+
+
+			chart.append("line")
+				.attr("x1", 25)
+				.attr("y1", 110)
+				.attr("x2", 480)
+				.attr("y2", 110)
+				.attr("stroke-width", 5)
+				.attr("stroke", "black");
+
+			chart.append("line")
+				.attr("x1", 25)
+				.attr("y1", 60)
+				.attr("x2", 480)
+				.attr("y2", 60)
+				.attr("stroke-width", 1)
+				.attr("stroke", "black");
+
+			chart.append("text")
+				.attr("class", "y label")
+				.attr("text-anchor", "end")
+				.text("Democratic Share")
+				.attr("transform", "translate(20, 20) rotate(-90)");
+		
+
+
 	function politics() 
 	{
 		flag = "Politics";
