@@ -95,16 +95,44 @@ d3.json(dc).then(async function(json)
 		})
 		.on("mouseover", function(d) 
 		{
-			var district = d.properties[pc]
+			var district = d.properties[pc]; 
 
 			var demShare = parseInt(feat[district-1]["Democratic"], 10)/
 						  (parseInt(feat[district-1]["Democratic"], 10) + 
-						   parseInt(feat[district-1]["Republican"], 10))
+						   parseInt(feat[district-1]["Republican"], 10) + 
+						   parseInt(feat[district-1]["Other"], 10)); 
+
+			var repShare = parseInt(feat[district-1]["Republican"], 10)/
+			  			  (parseInt(feat[district-1]["Democratic"], 10) + 
+			  			   parseInt(feat[district-1]["Republican"], 10) + 
+			   		       parseInt(feat[district-1]["Other"], 10)); 
+
+			var color = ""; 
+			var win = ""; 
+			var margin = 0; 
+
+			if (repShare > demShare)
+			{
+				color = "#FF0000";
+				win = "R";
+				margin = repShare - demShare;
+			}
+			else
+			{
+				color = "#0000FF";
+				win = "D";
+				margin = demShare - repShare;
+			}
 
 			div.transition()
 				.duration(200)
 				.style("opacity", 0.95); 
-			div.text("Clinton 2-Party Share, 2016: " +  Math.round(demShare*10000)/100);
+			div.html("Clinton: " +  Math.round(demShare*10000)/100 + "<br/> Trump: " + 
+					(Math.round(repShare*10000)/100 + 
+						"<br/> <font color = '" + color + "'> <strong>" + 
+						win + " +" + (Math.round(margin*100))))	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
 		})
 		.on("mouseout", function(d) 
 		{       
@@ -139,16 +167,44 @@ d3.json(dc).then(async function(json)
 			}); 
 		map.on("mouseover", function(d) 
 		{
-			var district = d.properties[pc]
+			var district = d.properties[pc]; 
 
 			var demShare = parseInt(feat[district-1]["Democratic"], 10)/
 						  (parseInt(feat[district-1]["Democratic"], 10) + 
-						   parseInt(feat[district-1]["Republican"], 10))
+						   parseInt(feat[district-1]["Republican"], 10) + 
+						   parseInt(feat[district-1]["Other"], 10)); 
+
+			var repShare = parseInt(feat[district-1]["Republican"], 10)/
+			  			  (parseInt(feat[district-1]["Democratic"], 10) + 
+			  			   parseInt(feat[district-1]["Republican"], 10) + 
+			   		       parseInt(feat[district-1]["Other"], 10)); 
+
+			var color = ""; 
+			var win = ""; 
+			var margin = 0; 
+
+			if (repShare > demShare)
+			{
+				color = "#FF0000";
+				win = "R";
+				margin = repShare - demShare;
+			}
+			else
+			{
+				color = "#0000FF";
+				win = "D";
+				margin = demShare - repShare;
+			}
 
 			div.transition()
 				.duration(200)
 				.style("opacity", 0.95); 
-			div.text("Clinton 2-Party Share, 2016: " +  Math.round(demShare*10000)/100);
+			div.html("Clinton: " +  Math.round(demShare*10000)/100 + "<br/> Trump: " + 
+					(Math.round(repShare*10000)/100) + 
+						"<br/> <font color = '" + color + "'> <strong>" + 
+						win + " +" + (Math.round(margin*100)))
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
 		})
 			.on("mouseout", function(d) 
 			{       
@@ -186,16 +242,33 @@ d3.json(dc).then(async function(json)
 		map.on("mouseover", function(d) 
 		{
 
-			var district = d.properties[pc]
+			var district = d.properties[pc]; 
 
 			var whiteShare = parseInt(feat[district-1]["White"], 10)/
-							 parseInt(feat[district-1]["Population"], 10)
+							 parseInt(feat[district-1]["Population"], 10); 
 
+			var color = "";
+			var str = "";
+
+			if (whiteShare > 0.5)
+			{
+				color = "#000000"; 
+				str = "White";
+			}
+			else
+			{
+				color = "#009900";
+				str = "Minority";
+			}
 
 			div.transition()
 				.duration(200)
 				.style("opacity", 0.95); 
-			div.text("White Population, 2016: " +  Math.round(whiteShare*10000)/100);
+			div.html(Math.round(whiteShare*10000)/100 + "% White" + 
+						"<br/> <font color = '" + color + "'> <strong>" + 
+						"Majority " + str)	
+                .style("left", (d3.event.pageX) + "px")		
+                .style("top", (d3.event.pageY - 28) + "px");	
 		})
 			.on("mouseout", function(d) 
 			{       
@@ -282,16 +355,44 @@ function update(dc, fc, pc)
 				}); 
 			map.on("mouseover", function(d) 
 			{
-				var district = d.properties[pc]
+				var district = d.properties[pc]; 
 
 				var demShare = parseInt(feat[district-1]["Democratic"], 10)/
 							  (parseInt(feat[district-1]["Democratic"], 10) + 
-							   parseInt(feat[district-1]["Republican"], 10))
+							   parseInt(feat[district-1]["Republican"], 10) + 
+							   parseInt(feat[district-1]["Other"], 10)); 
+
+				var repShare = parseInt(feat[district-1]["Republican"], 10)/
+				  			  (parseInt(feat[district-1]["Democratic"], 10) + 
+				  			   parseInt(feat[district-1]["Republican"], 10) + 
+				   		       parseInt(feat[district-1]["Other"], 10)); 
+
+				var color = ""; 
+				var win = ""; 
+				var margin = 0; 
+
+				if (repShare > demShare)
+				{
+					color = "#FF0000";
+					win = "R";
+					margin = repShare - demShare;
+				}
+				else
+				{
+					color = "#0000FF";
+					win = "D";
+					margin = demShare - repShare;
+				}
 
 				div.transition()
 					.duration(200)
 					.style("opacity", 0.95); 
-				div.text("Clinton 2-Party Share, 2016: " +  Math.round(demShare*10000)/100);
+				div.html("Clinton: " +  Math.round(demShare*10000)/100 + "<br/> Trump: " + 
+						(Math.round(repShare*10000)/100 + 
+							"<br/> <font color = '" + color + "'> <strong>" + 
+							win + " +" + (Math.round(margin*100))))	
+	                .style("left", (d3.event.pageX) + "px")		
+	                .style("top", (d3.event.pageY - 28) + "px");	
 			})
 				.on("mouseout", function(d) 
 				{       
@@ -331,16 +432,33 @@ function update(dc, fc, pc)
 			map.on("mouseover", function(d) 
 			{
 
-				var district = d.properties[pc]
+				var district = d.properties[pc]; 
 
 				var whiteShare = parseInt(feat[district-1]["White"], 10)/
-								 parseInt(feat[district-1]["Population"], 10)
+								 parseInt(feat[district-1]["Population"], 10); 
 
+				var color = "";
+				var str = "";
+
+				if (whiteShare > 0.5)
+				{
+					color = "#000000"; 
+					str = "White";
+				}
+				else
+				{
+					color = "#009900";
+					str = "Minority";
+				}
 
 				div.transition()
 					.duration(200)
 					.style("opacity", 0.95); 
-				div.text("White Population, 2016: " +  Math.round(whiteShare*10000)/100);
+				div.html(Math.round(whiteShare*10000)/100 + "% White" + 
+							"<br/> <font color = '" + color + "'> <strong>" + 
+							"Majority " + str)	
+	                .style("left", (d3.event.pageX) + "px")		
+	                .style("top", (d3.event.pageY - 28) + "px");	
 			})
 				.on("mouseout", function(d) 
 				{       
