@@ -3,6 +3,14 @@ var height = 500
 var width = 960	
 var scale = 1
 
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
 // Define linear scale for output
 var colorp = d3.scaleLinear()
@@ -79,58 +87,15 @@ d3.json(dc).then(async function(json)
 		.style("stroke-width", "1")
 		.style("fill", function(d) 
 		{
-			var district = d.properties[pc]
-
-			var demShare = parseInt(feat[district-1]["Democratic"], 10)/
-						  (parseInt(feat[district-1]["Democratic"], 10) + 
-						   parseInt(feat[district-1]["Republican"], 10))
-
-			if (demShare) {
-				//If value exists…
-				return colorp(demShare);
-			} 
-			else {
-				//If value is undefined…
-				return "rgb(213,222,217)";}
+			return getRandomColor(); 
 		})
 		.on("mouseover", function(d) 
 		{
-			var district = d.properties[pc]; 
-
-			var demShare = parseInt(feat[district-1]["Democratic"], 10)/
-						  (parseInt(feat[district-1]["Democratic"], 10) + 
-						   parseInt(feat[district-1]["Republican"], 10) + 
-						   parseInt(feat[district-1]["Other"], 10)); 
-
-			var repShare = parseInt(feat[district-1]["Republican"], 10)/
-			  			  (parseInt(feat[district-1]["Democratic"], 10) + 
-			  			   parseInt(feat[district-1]["Republican"], 10) + 
-			   		       parseInt(feat[district-1]["Other"], 10)); 
-
-			var color = ""; 
-			var win = ""; 
-			var margin = 0; 
-
-			if (repShare > demShare)
-			{
-				color = "#FF0000";
-				win = "R";
-				margin = repShare - demShare;
-			}
-			else
-			{
-				color = "#0000FF";
-				win = "D";
-				margin = demShare - repShare;
-			}
-
+			var district = d.properties[pc];
 			div.transition()
 				.duration(200)
 				.style("opacity", 0.95); 
-			div.html("Clinton: " +  Math.round(demShare*10000)/100 + "<br/> Trump: " + 
-					(Math.round(repShare*10000)/100 + 
-						"<br/> <font color = '" + color + "'> <strong>" + 
-						win + " +" + (Math.round(margin*100))))	
+			div.html("<br/> Pop: " + Math.round(feat[district-1]["Population"]))	
                 .style("left", (d3.event.pageX) + "px")		
                 .style("top", (d3.event.pageY - 28) + "px");	
 		})
@@ -265,6 +230,7 @@ d3.json(dc).then(async function(json)
 				.duration(200)
 				.style("opacity", 0.95); 
 			div.html(Math.round(whiteShare*10000)/100 + "% White" + 
+						"<br/> Pop: " + Math.round(feat[district-1]["Population"]) +  
 						"<br/> <font color = '" + color + "'> <strong>" + 
 						"Majority " + str)	
                 .style("left", (d3.event.pageX) + "px")		
@@ -454,7 +420,8 @@ function update(dc, fc, pc)
 				div.transition()
 					.duration(200)
 					.style("opacity", 0.95); 
-				div.html(Math.round(whiteShare*10000)/100 + "% White" + 
+				div.html(Math.round(whiteShare*10000)/100 + "% White" +
+							"<br/> Pop: " + Math.round(feat[district-1]["Population"]) +  
 							"<br/> <font color = '" + color + "'> <strong>" + 
 							"Majority " + str)	
 	                .style("left", (d3.event.pageX) + "px")		
