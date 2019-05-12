@@ -34,7 +34,7 @@ var div = d3.select("#map")
 
 var de = []
 var fe = []
-for (i = 1; i < 70; i++)
+for (i = 1; i < 101; i++)
 {
 	de.push("PA/" + i + "/districts.json")
 	fe.push("PA/" + i + "/features.csv")
