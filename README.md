@@ -15,6 +15,6 @@ It is a future goal of mine to implement the server-based system, but honestly t
 
 ## Personal Commentary on the Project
 
-This was a *tough* dataset. It is extremely unforgiving, since most of the data is new, uncleaned, and therefore prone to errors. A single mistake in a 10000-node plot destroys the entire file. There were multiple states that I would have loved to use in this study; Texas, North Carolina and Ohio come to mind. However, a few precincts were off left in their shapefiles. 
+This was a *tough* dataset. It is extremely unforgiving, since most of the data is new, uncleaned, and therefore prone to errors. A single mistake in a 10000-node plot destroys the entire file. There were multiple states that I would have loved to use in this study; Texas, North Carolina and Ohio come to mind. However, a few precincts were off in their shapefiles, so it became impossible to use them. 
 
-It was not my original intention to be alone for the final project, but just made it significantly harder. My advice for future students of this class is categorically to avoid doing this project alone. 
+It was not my original intention to be alone for the final project, and the data being what it was made it that much more difficult. That said, I essentially learned a new language in about two weeks doing this, and am really glad that I was able to put something nice-looking out given that I started late. 
