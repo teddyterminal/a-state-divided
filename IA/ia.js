@@ -32,6 +32,11 @@ var div = d3.select("#map")
     		.attr("class", "tooltip")               
     		.style("opacity", 0);
 
+var text = d3.select("#map")
+		    .append("div")   
+    		.attr("class", "text")               
+    		.style("opacity", 0);
+
 var de = []
 var fe = []
 for (i = 1; i < 101; i++)
@@ -91,7 +96,6 @@ d3.json(dc).then(async function(json)
 	path = path.projection(projection);
 
 	var feat = await d3.csv(fc)
-	console.log(feat)
 
 	// Bind the data to the SVG and create one path per GeoJSON feature
 	var map = svg.selectAll("path")
@@ -121,6 +125,94 @@ d3.json(dc).then(async function(json)
 	           .duration(500)      
 	           .style("opacity", 0);   
 	    });
+
+	 d3.select("text-explainer")
+		.text(function(d)
+		{
+			demdist = 0;
+			repdist = 0;
+			repwv = 0;
+			demwv = 0;
+			totv = 0
+			console.log("hi"); 
+			for (i = 0; i < 4; i++)
+			{
+				totv += feat[i]["Republican"] + feat[i]["Democratic"] + feat[i]["Other"]
+				if (feat[i]["Democratic"] < feat[i]["Republican"])
+				{
+					repdist += 1; 
+					demwv += feat[i]["Democratic"]
+					repwv += feat[i]["Republican"] - feat[i]["Democratic"]
+				}
+				else 
+				{
+					demwv += feat[i]["Democratic"] - feat[i]["Republican"]
+					repwv += feat[i]["Republican"] 
+				}
+
+			}
+
+			effgap = Math.round((demwv - repwv)/totv*10000/100)
+
+			r = "#FF0000"
+			d = "#0000FF"
+			ec = ""
+			fav = ""
+
+			if (effgap < 0)
+			{
+				ec = d
+				fav = "Democrats"
+			}
+			else 
+			{
+				ec = r
+				fav = "Republicans"
+			}
+			str = "There are <strong> <font color = " + r + "> " + repdist + " </font> </strong> Republican "; 
+			str = str + "and <strong <font color = " + d + "> " + demdist + " </font> </strong> Democratic "; 
+			str = str + " districts under this plan. The efficiency gap is <strong> <font color = " + ec + "> "; 
+			str = str + effgap + " towards the " + fav + ". ";
+
+			return str 
+		})
+
+	await d3.csv("iacities.csv").then(function(data) {
+
+		svg.selectAll("circle")
+		  .data(data)
+		  .enter()
+		  .append("circle")
+		  .attr("cx", function(d) {
+		    return projection([d.lon, d.lat])[0];
+		  })
+		  .attr("cy", function(d) 
+		  {
+		    return projection([d.lon, d.lat])[1];
+		  })
+		  .attr("r", 3)
+		  .style("fill", "#000000")
+		  .text(function(d){return d.place;});
+
+
+		svg.selectAll("text")
+		       .data(data)
+		       .enter()
+		       .append("text")
+		       // Add your code below this line
+		       .text((d) => d.place)
+		       .attr("x", function(d) {
+		          q = projection([d.lon, d.lat])[0];
+		          return q + 5
+		        })
+		       .style("fill", "#000000")
+		       .style("font-size", "12px")
+		       .style("stroke", "#FFFFFF")
+		       .style("stroke-width", "1px")
+		       .attr("y",   function(d){
+		    return projection([d.lon, d.lat])[1];
+		  });
+	})
 
 	function politics() 
 	{

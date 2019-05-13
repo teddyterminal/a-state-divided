@@ -84,6 +84,7 @@ d3.select("#explore").on("click", function()
 	update(dc, fc, pc); 
 }); 
 
+
 var flag = "Politics"
 
 // Load GeoJSON data and merge with states data
@@ -144,8 +145,43 @@ d3.json(dc).then(async function(json)
 	           .duration(500)      
 	           .style("opacity", 0);   
 	    });
+	
+	await d3.csv("pacities.csv").then(function(data) {
+
+		svg.selectAll("circle")
+		  .data(data)
+		  .enter()
+		  .append("circle")
+		  .attr("cx", function(d) {
+		    return projection([d.lon, d.lat])[0];
+		  })
+		  .attr("cy", function(d) 
+		  {
+		    return projection([d.lon, d.lat])[1];
+		  })
+		  .attr("r", 3)
+		  .style("fill", "#000000")
+		  .text(function(d){return d.place;});
 
 
+		svg.selectAll("text")
+		       .data(data)
+		       .enter()
+		       .append("text")
+		       // Add your code below this line
+		       .text((d) => d.place)
+		       .attr("x", function(d) {
+		          q = projection([d.lon, d.lat])[0];
+		          return q + 5
+		        })
+		       .style("fill", "#000000")
+		       .style("font-size", "12px")
+		       .style("stroke", "#FFFFFF")
+		       .style("stroke-width", "1px")
+		       .attr("y",   function(d){
+		    return projection([d.lon, d.lat])[1]+10;
+		  });
+		   })
 	function politics() 
 	{
 		flag = "Politics";
