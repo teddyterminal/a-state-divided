@@ -38,7 +38,13 @@ body {
 
 </style>
 </head>
-<body>
+<body bgcolor = "#AAAAAA">
+<font size = '75px'> <center> <strong> A State, Divided </strong> </center> </font>  
+<div id = "usmap" align = "center"></div>  
+<br/> 
+<div id = "uslegend" align = "center"></div>   
+
+The practice of 
 <script type="text/javascript">
 
 /*  This visualization was made possible by modifying code provided by:
@@ -74,13 +80,13 @@ var color = d3.scaleLinear()
 var legendText = ["Districts Available", "Shapefile In Progress", "1 Congressional District", "Districts Not Available"];
 
 //Create SVG element and append map to the SVG
-var svg = d3.select("body")
+var svg = d3.select("#usmap")
       .append("svg")
       .attr("width", width)
       .attr("height", height);
         
 // Append Div for tooltip to SVG
-var div = d3.select("body")
+var div = d3.select("#usmap")
         .append("div")   
         .attr("class", "tooltip")               
         .style("opacity", 0);
@@ -153,8 +159,7 @@ svg.selectAll("path")
 
         
 // Modified Legend Code from Mike Bostock: http://bl.ocks.org/mbostock/3888852
-var legend = d3.select("body").append("svg")
-            .attr("class", "legend")
+var legend = d3.select("#uslegend").append("svg")
           .attr("width", 140)
           .attr("height", 200)
           .selectAll("g")
