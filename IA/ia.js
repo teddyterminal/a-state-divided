@@ -378,10 +378,11 @@ d3.json(dc).then(async function(json)
 
 				tot += t
 				white += w
-				if (w/tot < 0.5)
+				if (w/t < 0.5)
 					majmin += 1
 
 			}
+
 
 			c1 = "#000000"
 			r = "#009900"
