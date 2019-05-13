@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="d3/d3.min.js"></script>
+<style type="text/css">
+
+/* On mouse hover, lighten state color */
+path:hover {
+	fill-opacity: .7;
+	border-color: #000000
+}
+
+div.tooltip {	
+    position: absolute;			
+    text-align: center;			
+    width: 100px;					
+    height: 40px;					
+    padding: 2px;				
+    font: 12px sans-serif;		
+    background: #ffccff;	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;			
+}
+        
+/* Legend Font Style */
+body {
+	font: 11px sans-serif;
+}
+        
+/* Legend Position Style */
+.legend {
+	position:absolute;
+	left:800px;
+	top:350px;
+}
+
+</style>
+</head>
+<body bgcolor = "AAAAAA">
+<br/>   
+<button id = "Home" onclick = "location.href='index.html';"> Back to National Map </button>
+<br/> <br/> 
+
+<button id = "Politics"> Politics </button>
+<button id = "Race"> Race </button> 
+<button id = "dc"> Current Disricts </button>
+<button id = "explore"> Explore! </button>
+
+<br/> <br/>
+<div id = "map"> </div>
+<br/> <br/>
+<div id = "chart"> </div>
+
+
+<script src = "IA/IA.js">
+
+</script>
+</body>
+</html>

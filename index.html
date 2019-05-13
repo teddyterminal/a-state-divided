@@ -69,9 +69,9 @@ var path = d3.geoPath()               // path generator that will convert GeoJSO
     
 // Define linear scale for output
 var color = d3.scaleLinear()
-        .range(["rgb(213,222,217)","rgb(75,50,150)","rgb(250,240,255)"]);
+        .range(["rgb(213,222,217)", "rgb(250,240,255)","rgb(200,180,200)", "rgb(75,50,150)" ]);
 
-var legendText = ["1 Congressional District", "Districts Available", "Districts Not Available"];
+var legendText = ["Districts Available", "Shapefile In Progress", "1 Congressional District", "Districts Not Available"];
 
 //Create SVG element and append map to the SVG
 var svg = d3.select("body")
@@ -87,7 +87,7 @@ var div = d3.select("body")
 
 // Load in my states data!
 d3.csv("availability.csv").then(async function(data) {
-color.domain([0,1,2]); // setting the range of the input data
+color.domain([0, 1, 2, 3]); // setting the range of the input data
 
 // Load GeoJSON data and merge with states data
 var json = await d3.json("usa.json").then(function(json){
@@ -144,10 +144,8 @@ svg.selectAll("path")
         window.location = 'pa.html'; 
       else if (name == "Georgia")
         window.location = 'ga.html'; 
-      else if (name == "Virginia")
-        window.location = 'va.html'; 
-      else if (name == "Wisconsin")
-        window.location = 'wi.html'; 
+      else if (name == "Iowa")
+        window.location = 'ia.html'; 
     });
 
     
