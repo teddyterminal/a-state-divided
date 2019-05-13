@@ -126,53 +126,14 @@ d3.json(dc).then(async function(json)
 	           .style("opacity", 0);   
 	    });
 
-	 d3.select("text-explainer")
-		.text(function(d)
+	d3.select("#text-explainer")
+		.html(function(d)
 		{
-			demdist = 0;
-			repdist = 0;
-			repwv = 0;
-			demwv = 0;
-			totv = 0
-			console.log("hi"); 
-			for (i = 0; i < 4; i++)
-			{
-				totv += feat[i]["Republican"] + feat[i]["Democratic"] + feat[i]["Other"]
-				if (feat[i]["Democratic"] < feat[i]["Republican"])
-				{
-					repdist += 1; 
-					demwv += feat[i]["Democratic"]
-					repwv += feat[i]["Republican"] - feat[i]["Democratic"]
-				}
-				else 
-				{
-					demwv += feat[i]["Democratic"] - feat[i]["Republican"]
-					repwv += feat[i]["Republican"] 
-				}
-
-			}
-
-			effgap = Math.round((demwv - repwv)/totv*10000/100)
-
-			r = "#FF0000"
-			d = "#0000FF"
-			ec = ""
-			fav = ""
-
-			if (effgap < 0)
-			{
-				ec = d
-				fav = "Democrats"
-			}
-			else 
-			{
-				ec = r
-				fav = "Republicans"
-			}
-			str = "There are <strong> <font color = " + r + "> " + repdist + " </font> </strong> Republican "; 
-			str = str + "and <strong <font color = " + d + "> " + demdist + " </font> </strong> Democratic "; 
-			str = str + " districts under this plan. The efficiency gap is <strong> <font color = " + ec + "> "; 
-			str = str + effgap + " towards the " + fav + ". ";
+			str = "<font size = '5px'> Iowa has <strong> 4 </strong> congressional districts and <strong> 6 </strong> electoral votes. Click the" + 
+				  "<font color = 'purple'> <strong> politics </strong> </font> button to see the political breakdown of the districts " +
+				  "according to the result of the 2016 election. Click the <font color = '#009900'> <strong> race </strong> </font>" + 
+				  "button to see the racial breakdown of each congressional district. The explore button will generate" + 
+				  " a random 4-district cut of the state of Iowa and analyze it."
 
 			return str 
 		})
@@ -285,6 +246,63 @@ d3.json(dc).then(async function(json)
 		           .duration(500)      
 		           .style("opacity", 0);   
 		    });
+
+		d3.select("#text-explainer")
+		.html(function(d)
+		{
+			demdist = 0;
+			repdist = 0;
+			repwv = 0;
+			demwv = 0;
+			totv = 0;
+			for (i = 0; i < 4; i++)
+			{
+				r = parseInt(feat[i]["Republican"], 10)
+				d = parseInt(feat[i]["Democratic"], 10)
+				o = parseInt(feat[i]["Other"], 10)
+
+				totv += d + r + o
+				if (d < r)
+				{
+					repdist += 1; 
+					console.log(feat[i]["Democratic"])
+					demwv += d
+					repwv += r - d
+				}
+				else 
+				{
+					demdist += 1
+					demwv += d - r
+					repwv += r
+				}
+
+			}
+
+			effgap = Math.round((demwv - repwv)/totv*10000)/100
+			console.log(demwv, repwv, totv)
+			r = "#FF0000"
+			d = "#0000FF"
+			ec = ""
+			fav = ""
+
+			if (effgap < 0)
+			{
+				ec = d
+				fav = "Democrats"
+			}
+			else 
+			{
+				ec = r
+				fav = "Republicans"
+			}
+			str = "<font size = '5px'> There are <strong> 4 </strong> congressional districts in Iowa. <strong> <font color = " + r + "> " + 
+				  repdist + " </font> </strong> of them are held by Republicans,  "; 
+			str = str + "and <strong> <font color = " + d + "> " + demdist + " </font> </strong> of them are held by "; 
+			str = str + " Democrats under this plan. The efficiency gap is <strong> <font color = " + ec + "> "; 
+			str = str + Math.abs(effgap) + "% towards the " + fav + ". ";
+
+			return str 
+		})
 		return map
 	}
 
@@ -350,8 +368,46 @@ d3.json(dc).then(async function(json)
 		           .duration(500)      
 		           .style("opacity", 0);   
 			});
+		d3.select("#text-explainer")
+		.html(function(d)
+		{
+			white = 0 
+			tot = 0
+			majmin = 0
+			for (i = 0; i < 4; i++)
+			{
+				t = parseInt(feat[i]["Population"], 10)
+				w = parseInt(feat[i]["White"], 10)
 
-		
+				tot += t
+				white += w
+				if (w/tot < 0.5)
+					majmin += 1
+
+			}
+
+			c1 = "#000000"
+			r = "#009900"
+			w1 = ""
+			w2 = ""
+
+			if (majmin == 1)
+			{
+				w1 = "is"
+				w2 = "district"
+			}
+			else 
+			{
+				w1 = "are"
+				w2 = "districts"
+			}
+			str = "<font size = '5px'> Iowa is <strong> " + Math.round(white/tot*10000)/100 + "</strong>% White. "; 
+			str = str + "There " + w1 + " <strong> <font color = " + r + ">" + majmin + " majority-minority " + w2; 
+			str = str + " under this plan.";
+
+			return str 
+		})
+		return map; 
 	}
 
 
@@ -472,6 +528,64 @@ function update(dc, fc, pc)
 			           .duration(500)      
 			           .style("opacity", 0);   
 			    });
+
+		d3.select("#text-explainer")
+		.html(function(d)
+		{
+			demdist = 0;
+			repdist = 0;
+			repwv = 0;
+			demwv = 0;
+			totv = 0;
+			console.log("hi"); 
+			for (i = 0; i < 4; i++)
+			{
+				r = parseInt(feat[i]["Republican"], 10)
+				d = parseInt(feat[i]["Democratic"], 10)
+				o = parseInt(feat[i]["Other"], 10)
+
+				totv += d + r + o
+				if (d < r)
+				{
+					repdist += 1; 
+					console.log(feat[i]["Democratic"])
+					demwv += d
+					repwv += r - d
+				}
+				else 
+				{
+					demdist += 1
+					demwv += d - r
+					repwv += r
+				}
+
+			}
+
+			effgap = Math.round((demwv - repwv)/totv*10000)/100
+			console.log(demwv, repwv, totv)
+			r = "#FF0000"
+			d = "#0000FF"
+			ec = ""
+			fav = ""
+
+			if (effgap < 0)
+			{
+				ec = d
+				fav = "Democrats"
+			}
+			else 
+			{
+				ec = r
+				fav = "Republicans"
+			}
+			str = "<font size = '5px'> There are <strong> 4 </strong> congressional districts in Iowa. <strong> <font color = " + r + "> " + 
+				  repdist + " </font> </strong> of them are held by Republicans,  "; 
+			str = str + "and <strong> <font color = " + d + "> " + demdist + " </font> </strong> of them are held by "; 
+			str = str + " Democrats under this plan. The efficiency gap is <strong> <font color = " + ec + "> "; 
+			str = str + Math.abs(effgap) + "% towards the " + fav + ". ";
+
+			return str 
+		})
 			return map
 		}
 
@@ -539,7 +653,45 @@ function update(dc, fc, pc)
 			           .duration(500)      
 			           .style("opacity", 0);   
 				});
+				d3.select("#text-explainer")
+		.html(function(d)
+		{
+			white = 0 
+			tot = 0
+			majmin = 0
+			for (i = 0; i < 4; i++)
+			{
+				t = parseInt(feat[i]["Population"], 10)
+				w = parseInt(feat[i]["White"], 10)
 
+				tot += t
+				white += w
+				if (w/t < 0.5)
+					majmin += 1
+
+			}
+
+			c1 = "#000000"
+			r = "#009900"
+			w1 = ""
+			w2 = ""
+
+			if (majmin == 1)
+			{
+				w1 = "is"
+				w2 = "district"
+			}
+			else 
+			{
+				w1 = "are"
+				w2 = "districts"
+			}
+			str = "<font size = '5px'> Iowa is <strong> " + Math.round(white/tot*10000)/100 + "</strong>% White. "; 
+			str = str + "There " + w1 + " <strong> <font color = " + r + ">" + majmin + " majority-minority " + w2; 
+			str = str + " under this plan.";
+
+			return str 
+		})
 			
 		}
 

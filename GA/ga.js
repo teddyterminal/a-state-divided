@@ -157,6 +157,18 @@ d3.json(dc).then(async function(json)
 		       .attr("y",   function(d){
 		    return projection([d.lon, d.lat])[1];
 		  });
+
+		  d3.select("#text-explainer")
+		.html(function(d)
+		{
+			str = "<font size = '5px'> Georgia has <strong> 14 </strong> congressional districts and <strong> 16 </strong> electoral votes. Click the" + 
+				  "<font color = 'purple'> <strong> politics </strong> </font> button to see the political breakdown of the districts " +
+				  "according to the result of the 2016 election. Click the <font color = '#009900'> <strong> race </strong> </font>" + 
+				  "button to see the racial breakdown of each congressional district. The explore button will generate" + 
+				  " a random 14-district cut of the state of Georgia and analyze it."
+
+			return str 
+		})     
 		         })  
 	function politics() 
 	{
@@ -229,7 +241,63 @@ d3.json(dc).then(async function(json)
 		           .duration(500)      
 		           .style("opacity", 0);   
 		    });
+		d3.select("#text-explainer").html(function(d)
+		{
+			demdist = 0;
+			repdist = 0;
+			repwv = 0;
+			demwv = 0;
+			totv = 0;
+			for (i = 0; i < 14; i++)
+			{
+				r = parseInt(feat[i]["Republican"], 10)
+				d = parseInt(feat[i]["Democratic"], 10)
+				o = parseInt(feat[i]["Other"], 10)
+
+				totv += d + r + o
+				if (d < r)
+				{
+					repdist += 1; 
+					console.log(feat[i]["Democratic"])
+					demwv += d
+					repwv += r - d
+				}
+				else 
+				{
+					demdist += 1
+					demwv += d - r
+					repwv += r
+				}
+
+			}
+
+			effgap = Math.round((demwv - repwv)/totv*10000)/100
+			console.log(demwv, repwv, totv)
+			r = "#FF0000"
+			d = "#0000FF"
+			ec = ""
+			fav = ""
+
+			if (effgap < 0)
+			{
+				ec = d
+				fav = "Democrats"
+			}
+			else 
+			{
+				ec = r
+				fav = "Republicans"
+			}
+			str = "<font size = '5px'> There are <strong> 14 </strong> congressional districts in Georgia. <strong> <font color = " + r + "> " + 
+				  repdist + " </font> </strong> of them are held by Republicans,  "; 
+			str = str + "and <strong> <font color = " + d + "> " + demdist + " </font> </strong> of them are held by "; 
+			str = str + " Democrats under this plan. The efficiency gap is <strong> <font color = " + ec + "> "; 
+			str = str + Math.abs(effgap) + "% towards the " + fav + ". ";
+
+			return str 
+		})
 		return map
+
 	}
 
 	function race() 
@@ -295,7 +363,45 @@ d3.json(dc).then(async function(json)
 		           .style("opacity", 0);   
 			});
 
-		
+				d3.select("#text-explainer")
+		.html(function(d)
+		{
+			white = 0 
+			tot = 0
+			majmin = 0
+			for (i = 0; i < 14; i++)
+			{
+				t = parseInt(feat[i]["Population"], 10)
+				w = parseInt(feat[i]["White"], 10)
+
+				tot += t
+				white += w
+				if (w/t < 0.5)
+					majmin += 1
+
+			}
+
+			c1 = "#000000"
+			r = "#009900"
+			w1 = ""
+			w2 = ""
+
+			if (majmin == 1)
+			{
+				w1 = "is"
+				w2 = "district"
+			}
+			else 
+			{
+				w1 = "are"
+				w2 = "districts"
+			}
+			str = "<font size = '5px'> Georgia is <strong> " + Math.round(white/tot*10000)/100 + "</strong>% White. "; 
+			str = str + "There " + w1 + " <strong> <font color = " + r + ">" + majmin + " majority-minority " + w2; 
+			str = str + " under this plan.";
+
+			return str 
+		})
 	}
 
 
@@ -416,6 +522,62 @@ function update(dc, fc, pc)
 			           .duration(500)      
 			           .style("opacity", 0);   
 			    });
+
+				d3.select("#text-explainer").html(function(d)
+		{
+			demdist = 0;
+			repdist = 0;
+			repwv = 0;
+			demwv = 0;
+			totv = 0;
+			for (i = 0; i < 14; i++)
+			{
+				r = parseInt(feat[i]["Republican"], 10)
+				d = parseInt(feat[i]["Democratic"], 10)
+				o = parseInt(feat[i]["Other"], 10)
+
+				totv += d + r + o
+				if (d < r)
+				{
+					repdist += 1; 
+					console.log(feat[i]["Democratic"])
+					demwv += d
+					repwv += r - d
+				}
+				else 
+				{
+					demdist += 1
+					demwv += d - r
+					repwv += r
+				}
+
+			}
+
+			effgap = Math.round((demwv - repwv)/totv*10000)/100
+			console.log(demwv, repwv, totv)
+			r = "#FF0000"
+			d = "#0000FF"
+			ec = ""
+			fav = ""
+
+			if (effgap < 0)
+			{
+				ec = d
+				fav = "Democrats"
+			}
+			else 
+			{
+				ec = r
+				fav = "Republicans"
+			}
+			str = "<font size = '5px'> There are <strong> 14 </strong> congressional districts in Georgia. <strong> <font color = " + r + "> " + 
+				  repdist + " </font> </strong> of them are held by Republicans,  "; 
+			str = str + "and <strong> <font color = " + d + "> " + demdist + " </font> </strong> of them are held by "; 
+			str = str + " Democrats under this plan. The efficiency gap is <strong> <font color = " + ec + "> "; 
+			str = str + Math.abs(effgap) + "% towards the " + fav + ". ";
+
+			return str 
+		})
 			return map
 		}
 
@@ -484,7 +646,45 @@ function update(dc, fc, pc)
 			           .style("opacity", 0);   
 				});
 
-			
+		d3.select("#text-explainer")
+		.html(function(d)
+		{
+			white = 0 
+			tot = 0
+			majmin = 0
+			for (i = 0; i < 14; i++)
+			{
+				t = parseInt(feat[i]["Population"], 10)
+				w = parseInt(feat[i]["White"], 10)
+
+				tot += t
+				white += w
+				if (w/t < 0.5)
+					majmin += 1
+
+			}
+
+			c1 = "#000000"
+			r = "#009900"
+			w1 = ""
+			w2 = ""
+
+			if (majmin == 1)
+			{
+				w1 = "is"
+				w2 = "district"
+			}
+			else 
+			{
+				w1 = "are"
+				w2 = "districts"
+			}
+			str = "<font size = '5px'> Georgia is <strong> " + Math.round(white/tot*10000)/100 + "</strong>% White. "; 
+			str = str + "There " + w1 + " <strong> <font color = " + r + ">" + majmin + " majority-minority " + w2; 
+			str = str + " under this plan.";
+
+			return str 
+		})	
 		}
 
 

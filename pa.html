@@ -42,21 +42,23 @@ body {
 <br/> 	
 <button id = "Home" onclick = "location.href='index.html';"> Back to National Map </button>
 <br/> <br/> 
+<font size = "50px"> <strong> <center> Pennsylvania's Congressional Districts </center> </strong> </font>
 
+<div style="float: left"><strong>Show: </strong> 
 <button id = "Politics"> Politics </button>
-<button id = "Race"> Race </button> 
-<button id = "d2018"> 2018 </button>
-<button id = "d2011"> 2011 </button>
-<button id = "dd538"> 538 Democratic Gerrymander </button>
-<button id = "dr538"> 538 Republican Gerrymander </button>
-<button id = "dc538"> 538 Compact Districts </button>
-<button id = "dg8"> 8th Grade Plan </button>
-<button id = "explore"> Explore! </button>
+<button id = "Race"> Race </button> </div>
+
+
+<div style="float: right"><button id = "explore"> Generate New Random Map </button>
+</div>
+<br/> 
+<center><strong>Try these: </strong> <button id = "d2018"> 2018 Districts </button> <button id = "d2011"> 2011 Districts</button> <button id = "dd538"> 538 Democratic Gerrymander </button> <button id = "dr538"> 538 Republican Gerrymander </button> <button id = "dc538"> 538 Compact Districts </button> <button id = "dg8"> 8th Grade Plan </button></center>
+
 
 <br/> <br/>
-<div id = "map"> </div>
+<div id = "map" align = "center"> </div>
 <br/> <br/>
-<div id = "chart"> </div>
+<p id = "text-explainer" align = "center"> </p>
 
 
 <script src = "PA/pa.js">
