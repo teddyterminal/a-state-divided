@@ -69,6 +69,8 @@ body {
 
 /*  This visualization was made possible by modifying code provided by:
 
+Michelle Chandra: http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922
+
 Scott Murray, Choropleth example from "Interactive Data Visualization for the Web" 
 https://github.com/alignedleft/d3-book/blob/master/chapter_12/05_choropleth.html   
     
@@ -111,11 +113,9 @@ var div = d3.select("#usmap")
         .attr("class", "tooltip")               
         .style("opacity", 0);
 
-// Load in my states data!
 d3.csv("availability.csv").then(async function(data) {
 color.domain([0, 1, 2, 3]); // setting the range of the input data
 
-// Load GeoJSON data and merge with states data
 var map = await d3.json("usa.json").then(async function(json){
 
 // Loop through each state data value in the .csv file

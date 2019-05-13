@@ -3,7 +3,8 @@ var height = 500
 var width = 960	
 var scale = 1
 
-function getRandomColor() {
+function getRandomColor() 
+{
   var letters = '0123456789ABCDEF';
   var color = '#';
   for (var i = 0; i < 6; i++) {
