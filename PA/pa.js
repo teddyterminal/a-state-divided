@@ -225,7 +225,13 @@ d3.json(dc).then(async function(json)
 				.text("Democratic Share")
 				.attr("transform", "translate(20, 20) rotate(-90)");
 		
-
+			chart.append('g')
+			    .attr('class', 'grid')
+			    .attr('transform', `translate(0, ${height})`)
+			    .call(d3.axisBottom()
+			        .scale(xScale)
+			        .tickSize(-height, 0, 0)
+			        .tickFormat(''))
 
 	function politics() 
 	{

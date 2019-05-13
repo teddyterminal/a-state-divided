@@ -69,7 +69,7 @@ var path = d3.geoPath()               // path generator that will convert GeoJSO
     
 // Define linear scale for output
 var color = d3.scaleLinear()
-        .range(["rgb(213,222,217)","rgb(150,50,50)","rgb(250,240,240)"]);
+        .range(["rgb(213,222,217)","rgb(75,50,150)","rgb(250,240,255)"]);
 
 var legendText = ["1 Congressional District", "Districts Available", "Districts Not Available"];
 
@@ -92,7 +92,6 @@ color.domain([0,1,2]); // setting the range of the input data
 // Load GeoJSON data and merge with states data
 var json = await d3.json("usa.json").then(function(json){
 
-console.log(json)
 // Loop through each state data value in the .csv file
 for (var i = 0; i < data.length; i++) {
 
@@ -137,7 +136,19 @@ svg.selectAll("path")
   //If value is undefined…
   return "rgb(213,222,217)";
   }
-});
+})
+  .on("click", function(d)
+    {
+      var name = d.properties.name; 
+      if (name == "Pennsylvania")
+        window.location = 'pa.html'; 
+      else if (name == "Georgia")
+        window.location = 'ga.html'; 
+      else if (name == "Virginia")
+        window.location = 'va.html'; 
+      else if (name == "Wisconsin")
+        window.location = 'wi.html'; 
+    });
 
     
         
@@ -167,7 +178,7 @@ var legend = d3.select("body").append("svg")
 
 });
 </script>
-<a href "pa.html"> Pennsylvania </a>
+<a href="pa.html"> Pennsylvania </a>
 
 </body>
 </html>
