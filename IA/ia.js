@@ -60,7 +60,6 @@ d3.select("#explore").on("click", function()
 	dc = de[index]; 
 	fc = fe[index]; 
 	pc = "CD"; 
-	console.log(dc, fc, pc)
 	update(dc, fc, pc); 
 }); 
 
@@ -265,7 +264,6 @@ d3.json(dc).then(async function(json)
 				if (d < r)
 				{
 					repdist += 1; 
-					console.log(feat[i]["Democratic"])
 					demwv += d
 					repwv += r - d
 				}
@@ -279,7 +277,6 @@ d3.json(dc).then(async function(json)
 			}
 
 			effgap = Math.round((demwv - repwv)/totv*10000)/100
-			console.log(demwv, repwv, totv)
 			r = "#FF0000"
 			d = "#0000FF"
 			ec = ""
@@ -446,7 +443,6 @@ function update(dc, fc, pc)
 		path = path.projection(projection);
 
 		var feat = await d3.csv(fc)
-		console.log(feat)
 		svg.attr("d", path)
 		// Bind the data to the SVG and create one path per GeoJSON feature
 
@@ -537,7 +533,6 @@ function update(dc, fc, pc)
 			repwv = 0;
 			demwv = 0;
 			totv = 0;
-			console.log("hi"); 
 			for (i = 0; i < 4; i++)
 			{
 				r = parseInt(feat[i]["Republican"], 10)
@@ -548,7 +543,6 @@ function update(dc, fc, pc)
 				if (d < r)
 				{
 					repdist += 1; 
-					console.log(feat[i]["Democratic"])
 					demwv += d
 					repwv += r - d
 				}
@@ -562,7 +556,6 @@ function update(dc, fc, pc)
 			}
 
 			effgap = Math.round((demwv - repwv)/totv*10000)/100
-			console.log(demwv, repwv, totv)
 			r = "#FF0000"
 			d = "#0000FF"
 			ec = ""
