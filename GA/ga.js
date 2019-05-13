@@ -162,7 +162,7 @@ d3.json(dc).then(async function(json)
 			str = "<font size = '5px'> Georgia has <strong> 14 </strong> congressional districts and <strong> 16 </strong> electoral votes. Click the" + 
 				  "<font color = 'purple'> <strong> politics </strong> </font> button to see the political breakdown of the districts " +
 				  "according to the result of the 2016 election. Click the <font color = '#009900'> <strong> race </strong> </font>" + 
-				  "button to see the racial breakdown of each congressional district. The explore button will generate" + 
+				  "button to see the racial breakdown of each congressional district. Greener indicates less white. The Generate Random button will create" + 
 				  " a random 14-district cut of the state of Georgia and analyze it."
 
 			return str 

@@ -186,7 +186,7 @@ d3.json(dc).then(async function(json)
 			str = "<font size = '5px'> Pennsylvania has <strong> 18 </strong> congressional districts and <strong> 20 </strong> electoral votes. Click the" + 
 				  "<font color = 'purple'> <strong> politics </strong> </font> button to see the political breakdown of the districts " +
 				  "according to the result of the 2016 election. Click the <font color = '#009900'> <strong> race </strong> </font>" + 
-				  "button to see the racial breakdown of each congressional district. The middle buttons reflect district lines, " + 
+				  "button to see the racial breakdown of each congressional district. Greener indicates less white. The middle buttons reflect district lines, " + 
 				  "both potential and actual, for Pennsylvania prior to the 2018 PA Supreme Court decision to overturn the 2011 lines. The Generate Random Map button will create" + 
 				  " a random 18-district cut of the state of Pennsylvania and analyze it."
 
