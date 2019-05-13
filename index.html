@@ -2,62 +2,171 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<script src="d3/d3.min.js"></script>
+<script src="http://d3js.org/d3.v5.min.js"></script>
 <style type="text/css">
 
 /* On mouse hover, lighten state color */
 path:hover {
-	fill-opacity: .7;
-	border-color: #000000
+  fill-opacity: .7;
 }
 
-div.tooltip {	
-    position: absolute;			
-    text-align: center;			
-    width: 100px;					
-    height: 40px;					
-    padding: 2px;				
-    font: 12px sans-serif;		
-    background: #ffccff;	
-    border: 0px;		
-    border-radius: 8px;			
-    pointer-events: none;			
+/* Style for Custom Tooltip */
+div.tooltip {   
+  position: absolute;           
+  text-align: center;           
+  width: 60px;                  
+  height: 28px;                 
+  padding: 2px;             
+  font: 12px sans-serif;        
+  background: white;   
+  border: 0px;      
+  border-radius: 8px;           
+  pointer-events: none;         
 }
         
 /* Legend Font Style */
 body {
-	font: 11px sans-serif;
+  font: 11px sans-serif;
 }
         
 /* Legend Position Style */
 .legend {
-	position:absolute;
-	left:800px;
-	top:350px;
+  position:absolute;
+  left:800px;
+  top:350px;
 }
 
 </style>
 </head>
-<body bgcolor = "AAAAAA">
-<br/> 	
-<button id = "Politics"> Politics </button>
-<button id = "Race"> Race </button> 
-<button id = "d2018"> 2018 </button>
-<button id = "d2011"> 2011 </button>
-<button id = "dd538"> 538 Democratic Gerrymander </button>
-<button id = "dr538"> 538 Republican Gerrymander </button>
-<button id = "dc538"> 538 Compact Districts </button>
-<button id = "dg8"> 8th Grade Plan </button>
-<button id = "explore"> Explore! </button>
+<body>
+<script type="text/javascript">
 
-<br/> <br/>
-<div id = "map"> </div>
-<br/> <br/>
-<div id = "chart"> </div>
+/*  This visualization was made possible by modifying code provided by:
 
+Scott Murray, Choropleth example from "Interactive Data Visualization for the Web" 
+https://github.com/alignedleft/d3-book/blob/master/chapter_12/05_choropleth.html   
+    
+Malcolm Maclean, tooltips example tutorial
+http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
 
-<script src = "PA/pa.js">
+Mike Bostock, Pie Chart Legend
+http://bl.ocks.org/mbostock/3888852  */
 
+    
+//Width and height of map
+var width = 960;
+var height = 500;
+
+// D3 Projection
+var projection = d3.geoAlbersUsa()
+           .translate([width/2, height/2])    // translate to center of screen
+           .scale([1000]);          // scale things down so see entire US
+        
+// Define path generator
+var path = d3.geoPath()               // path generator that will convert GeoJSON to SVG paths
+         .projection(projection);  // tell path generator to use albersUsa projection
+
+    
+// Define linear scale for output
+var color = d3.scaleLinear()
+        .range(["rgb(213,222,217)","rgb(150,50,50)","rgb(250,240,240)"]);
+
+var legendText = ["1 Congressional District", "Districts Available", "Districts Not Available"];
+
+//Create SVG element and append map to the SVG
+var svg = d3.select("body")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+        
+// Append Div for tooltip to SVG
+var div = d3.select("body")
+        .append("div")   
+        .attr("class", "tooltip")               
+        .style("opacity", 0);
+
+// Load in my states data!
+d3.csv("availability.csv").then(async function(data) {
+color.domain([0,1,2]); // setting the range of the input data
+
+// Load GeoJSON data and merge with states data
+var json = await d3.json("usa.json").then(function(json){
+
+console.log(json)
+// Loop through each state data value in the .csv file
+for (var i = 0; i < data.length; i++) {
+
+  // Grab State Name
+  var dataState = data[i].state;
+
+  // Grab data value 
+  var dataValue = data[i].visited;
+
+  // Find the corresponding state inside the GeoJSON
+  for (var j = 0; j < json.features.length; j++)  {
+    var jsonState = json.features[j].properties.name;
+
+    if (dataState == jsonState) {
+
+    // Copy the data value into the JSON
+    json.features[j].properties.visited = dataValue; 
+
+    // Stop looking through the JSON
+    break;
+    }
+  }
+}
+    
+// Bind the data to the SVG and create one path per GeoJSON feature
+svg.selectAll("path")
+  .data(json.features)
+  .enter()
+  .append("path")
+  .attr("d", path)
+  .style("stroke", "#fff")
+  .style("stroke-width", "1")
+  .style("fill", function(d) {
+
+  // Get data value
+  var value = d.properties.visited;
+
+  if (value) {
+  //If value exists…
+  return color(value);
+  } else {
+  //If value is undefined…
+  return "rgb(213,222,217)";
+  }
+});
+
+    
+        
+// Modified Legend Code from Mike Bostock: http://bl.ocks.org/mbostock/3888852
+var legend = d3.select("body").append("svg")
+            .attr("class", "legend")
+          .attr("width", 140)
+          .attr("height", 200)
+          .selectAll("g")
+          .data(color.domain().slice().reverse())
+          .enter()
+          .append("g")
+          .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+    legend.append("rect")
+        .attr("width", 18)
+        .attr("height", 18)
+        .style("fill", color);
+
+    legend.append("text")
+        .data(legendText)
+          .attr("x", 24)
+          .attr("y", 9)
+          .attr("dy", ".35em")
+          .text(function(d) { return d; });
+  });
+
+});
 </script>
 </body>
 </html>
+
