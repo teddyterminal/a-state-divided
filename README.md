@@ -1,5 +1,7 @@
 # A State, Divided
 
+Rishabh Chandra 
+
 The application is available at [https://github.mit.edu/pages/6894-sp19/A-State--Divided](https://github.mit.edu/pages/6894-sp19/A-State--Divided). 
 
 The presentation video is available [here](https://youtu.be/SGclzpQB_AQ).
