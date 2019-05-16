@@ -4,7 +4,7 @@ The application is available at [https://github.mit.edu/pages/6894-sp19/A-State-
 
 The presentation video is available [here](https://youtu.be/SGclzpQB_AQ).
 
-The final paper is available [here](final/Final_Paper.pdf) 
+The final paper is available [here](final/Final_Paper.pdf). 
 
 ## Process of Development
 The primary goal throughout was to develop a system that tackles the issue of gerrymandering in a way that combined the visual and research-minded approaches. On one end of the spectrum is a project like fivethirtyeight.com's [Atlas of Redistricting](https://projects.fivethirtyeight.com/redistricting-maps/). This is a project that offers a tremendous amount of insight into what a gerrymander is, how individual communities are affected, and how certain plans for states differ from each other. On the other end are projects like my UROP project currently, which focus on the mathematics of redistricting and indeed the graph theory and complex statistical knowledge needed to understand the data. These projects care little about individual plans, and instead are looking for summary statistics. 
